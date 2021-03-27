@@ -3,12 +3,13 @@
 #include <QQmlContext>
 #include <QQmlComponent>
 #include <studentmodel.h>
-#include <studentlist.h>
 #include <groupmodel.h>
-#include <grouplist.h>
 #include <account.h>
 #include <QQuickView>
+#include <classes.h>
+#include <date.h>
 
+#include "themelist.h"
 #include "database.h"
 #include "backend.h"
 #include <QIcon>
@@ -26,34 +27,34 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<Account>("account", 1, 0, "Account");
 
+    qmlRegisterUncreatableType<ThemeList>("theme_list", 1, 0, "ThemeList", "ThemeList should not be created in QML");
+
     qmlRegisterType<StudentModel>("student", 1, 0, "StudentModel");
-    qmlRegisterUncreatableType<StudentList>("student", 1, 0, "StudentList", QStringLiteral("StudentList should not be created in QML"));
-    qmlRegisterType<StudentModel>("student", 1, 0, "Student");
     qmlRegisterType<GroupModel>("groups", 1, 0, "GroupModel");
-    qmlRegisterUncreatableType<GroupList>("group", 1, 0, "GroupList", QStringLiteral("GroupList should not be created in QML"));
-    qmlRegisterType<GroupModel>("groups", 1, 0, "Group");
+    qmlRegisterType<DataBase>("database", 1, 0, "DataBase");
+    qmlRegisterType<Date>("date", 1, 0, "Date");
     app.setWindowIcon(QIcon("://icon.png"));
 
 
-    StudentList studentList;
-    GroupList groupList;
     DataBase database;
     database.connectToDataBase();
-    StudentModel model;
+    StudentModel studentModel;
     Account account;
-
-
-
+    GroupModel groupModel;
+    ThemeList themeList;
+    Classes classes;
+    Date dateModel;
 
     QQmlApplicationEngine engine;
 
 
-    engine.rootContext()->setContextProperty(QStringLiteral("studentList"), &studentList);
-    engine.rootContext()->setContextProperty(QStringLiteral("groupList"), &groupList);
     engine.rootContext()->setContextProperty("database", &database);
-    engine.rootContext()->setContextProperty("myModel", &model);
+    engine.rootContext()->setContextProperty("myModel", &studentModel);
+    engine.rootContext()->setContextProperty("theGroupModel", &groupModel);
     engine.rootContext()->setContextProperty("account", &account);
-    engine.rootContext()->setContextProperty(QStringLiteral("groupList"), &groupList);
+    engine.rootContext()->setContextProperty("themeList", &themeList);
+    engine.rootContext()->setContextProperty("classes", &classes);
+    engine.rootContext()->setContextProperty("dateModel", &dateModel);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

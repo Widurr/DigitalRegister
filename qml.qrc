@@ -1,14 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Page1Form.ui.qml</file>
-        <file>Page2Form.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>Twoje_zajecia.qml</file>
         <file>Uczniowie.qml</file>
         <file>Grupy.qml</file>
         <file>home-screen-512.png</file>
-        <file>ZajeciaAdd.qml</file>
         <file>GrAdd.qml</file>
         <file>ZajeciaPage.qml</file>
         <file>StronaGlowna.qml</file>
@@ -17,7 +14,19 @@
         <file>icon.png</file>
         <file>Ustawienia.qml</file>
         <file>Pomoc.qml</file>
-        <file>StronaStartowa.qml</file>
         <file>GrStudents.qml</file>
+        <file>stock-images/desktop2.jpg</file>
+        <file>TabelkaStyle.qml</file>
+        <file>Frekwencja.qml</file>
+        <file>FrekwAdd.qml</file>
+        <file>JednostkaLekcyjna.qml</file>
+        <file>icons/book.png</file>
+        <file>icons/check-mark.png</file>
+        <file>icons/grade.png</file>
+        <file>icons/group.png</file>
+        <file>icons/logout.png</file>
+        <file>icons/reading.png</file>
+        <file>icons/settings.png</file>
+        <file>icons/help.png</file>
     </qresource>
 </RCC>

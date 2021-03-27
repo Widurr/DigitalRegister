@@ -6,7 +6,7 @@
 class StudentModel : public QSqlQueryModel
 {
     Q_OBJECT
-    Q_PROPERTY(QVector<int> checked READ checkedList)
+    Q_PROPERTY(QString checked READ checkedList)
 
 public:
     explicit StudentModel(QObject* parent = nullptr);
@@ -17,29 +17,31 @@ public:
         FNameRole,
         LNameRole,
         PhoneRole,
+        AddressRole,
+        DescriptionRole,
+        LoginIDRole,
         checkedRole
     };
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-    QVector<int> checkedList() const {return checked;}
+    QString checkedList() const;
 
 protected:
     QHash<int, QByteArray> roleNames() const override;
 
 public slots:
-    void updateModel();
-    void updateModel(const QString& studentIDs);    // Shows only items which IDs are stored in the string
+    void updateModel(int loginID);
+    void updateModel(int loginID, const QString& studentIDs);    // Shows only items which IDs are stored in the string
     int getId(int row) const;
     void uncheckAll();
-    //void checkAll();
+    void checkAll();
 private:
     QVector<int> checked;
     bool isChecked(int index) const;
     void check(int index);
     void uncheck(int index);
-
     void checkedDebug() const;
 };
 

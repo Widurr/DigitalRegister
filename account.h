@@ -23,7 +23,7 @@ protected:
      QHash<int, QByteArray> roleNames() const override;
 public slots:
    //  void changeUserName(int index, QString &username);
-    // void changePassword(int index);
+     void changePassword(const int &index, const QString &newpassword);
      void updateModel();
      int getId(const QString &username);
    bool checkData(const QString &username, const QString &userpassword);

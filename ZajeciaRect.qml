@@ -17,7 +17,8 @@ Rectangle{
     MouseArea {
     anchors.fill: parent
     onClicked: { gridView.currentIndex = index
-       stackView.replace("ZajeciaPage.qml")
+
+       stackView.push("ZajeciaPage.qml")
     }
     }
 }

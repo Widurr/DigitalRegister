@@ -2,8 +2,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 
 Page {
-    implicitWidth: 600
-    implicitHeight: 400
+    implicitWidth: 950
+    implicitHeight: 700
 
     title: qsTr("Utwórz nowe zajęcia")
 

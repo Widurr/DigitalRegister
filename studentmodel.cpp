@@ -1,15 +1,12 @@
 #include "studentmodel.h"
-#include "studentlist.h"
-#include "student.h"
 #include "database.h"
-
 
 #include <QSqlQueryModel>
 
 StudentModel::StudentModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
-    this->updateModel();
+    this->updateModel(1);
 }
 
 
@@ -45,28 +42,45 @@ bool StudentModel::setData(const QModelIndex &index, const QVariant &value, int 
     return false;
 }
 
+QString StudentModel::checkedList() const
+{
+    QString str;
+    for(auto& i : checked)
+    {
+        str += QString::number(i);
+        str += ',';
+    }
+    return str;
+}
+
 QHash<int,QByteArray> StudentModel::roleNames() const{
     QHash<int,QByteArray> roles;
     roles[(int)Role::IdRole] = "id";
     roles[(int)Role::FNameRole] = "fname";
     roles[(int)Role::LNameRole] = "lname";
     roles[(int)Role::PhoneRole] = "phone";
+    roles[(int)Role::AddressRole] = "address";
+    roles[(int)Role::DescriptionRole] = "description";
+    roles[(int)Role::LoginIDRole] = "loginID";
     roles[(int)Role::checkedRole] = "checkedRole";
     return roles;
 }
 
 
 
-void StudentModel::updateModel()
+void StudentModel::updateModel(int loginID)
 {
-    this->setQuery("SELECT id, " TABLE_FIRSTNAME ", " TABLE_LASTNAME ", " TABLE_PHONENUMBER " FROM " TABLE);
+    QString index = QString::number(loginID);
+    this->setQuery("SELECT id, " TABLE_FIRSTNAME ", " TABLE_LASTNAME ", " TABLE_PHONENUMBER " FROM " TABLE " WHERE " LOGIN_ID "=" +index );
 }
 
-void StudentModel::updateModel(const QString &studentIDs)
+void StudentModel::updateModel(int loginID, const QString &studentIDs)   // funkcja uaktualnia model, aby wyświetlał tylko rekordy zgodne z id zawartym w stringu
 {
-    QString str = " WHERE id IN (" + studentIDs.left(studentIDs.length()-1) + ")";
-    qDebug() << str;
-    this->setQuery("SELECT id, " TABLE_FIRSTNAME ", " TABLE_LASTNAME ", " TABLE_PHONENUMBER " FROM " TABLE + str);
+    QString index = QString::number(loginID);
+    QString strWhere = " WHERE id IN (" + studentIDs.left(studentIDs.length()-1) + ")";
+    strWhere += "AND " LOGIN_ID "=" + index;
+    qDebug() << strWhere;
+    this->setQuery("SELECT id, " TABLE_FIRSTNAME ", " TABLE_LASTNAME ", " TABLE_PHONENUMBER " FROM " TABLE + strWhere);
 }
 
 int StudentModel::getId(int row) const
@@ -77,38 +91,44 @@ int StudentModel::getId(int row) const
 
 void StudentModel::uncheckAll()
 {
-    beginResetModel();
     checkedDebug();
-    checked.clear();
+    int size = this->rowCount();
+    for(int i = 0; i < size; i++)
+    {
+        setData(this->index(i, 0), QVariant(false), (int)Role::checkedRole);
+    }
     checkedDebug();
-    endResetModel();
-    //emit dataChanged(this->index(0, 0), this->index(this->rowCount(), columnCount()), QVector<int>() << (int)Role::checkedRole);
+    //emit dataChanged(this->index(0, 0), this->index(this->rowCount(), 0), QVector<int>() << (int)Role::checkedRole);
 }
-/*
+
 void StudentModel::checkAll()
 {
-    for(auto& i : mList->items())
-    {
-        checked.append(i.ID());
-    }
-    emit dataChanged(this->index(0), this->index(mList->items().length()-1), QVector<int>() << (int)Role::checkedRole);
-}
-*/
-bool StudentModel::isChecked(int index) const
-{
+    //beginResetModel();
     checkedDebug();
-    int id = this->getId(index);
+    int size = this->rowCount();
+    for(int i = 0; i < size; i++)
+    {
+        setData(this->index(i, 0), QVariant(true), (int)Role::checkedRole);
+    }
+    checkedDebug();
+    //endResetModel();
+    //emit dataChanged(this->index(0, 0), this->index(this->rowCount(), 0), QVector<int>() << (int)Role::checkedRole);
+}
+
+bool StudentModel::isChecked(int row) const
+{
+    int id = this->getId(row);
     return checked.contains(id);
 }
-void StudentModel::check(int index)
+void StudentModel::check(int row)
 {
-    int id = this->getId(index);
+    int id = this->getId(row);
     checked.append(id);
-    checkedDebug();
+    emit dataChanged(this->index(row, 0), this->index(row, 0), QVector<int>() << (int)Role::checkedRole);
 }
-void StudentModel::uncheck(int index)
+void StudentModel::uncheck(int row)
 {
-    int id = this->getId(index);
+    int id = this->getId(row);
     for(int i = 0; i < checked.length(); i++)
     {
         if(checked[i] == id)
@@ -117,7 +137,7 @@ void StudentModel::uncheck(int index)
             break;
         }
     }
-    checkedDebug();
+    emit dataChanged(this->index(row, 0), this->index(row, 0), QVector<int>() << (int)Role::checkedRole);
 }
 
 void StudentModel::checkedDebug() const
@@ -130,6 +150,6 @@ void StudentModel::checkedDebug() const
         str += QString::number(i);
         str += ", ";
     }
-    qDebug() << str;
+    qDebug() << str.left(str.length()-2);
 }
 

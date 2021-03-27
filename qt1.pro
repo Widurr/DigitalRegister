@@ -9,15 +9,17 @@ QT += gui
 
 SOURCES += \
         account.cpp \
+        classes.cpp \
         database.cpp \
-        group.cpp \
-        grouplist.cpp \
+        date.cpp \
+        filemanager.cpp \
+        filemanager.cpp \
+        grades.cpp \
         groupmodel.cpp \
-        student.cpp \
-        studentlist.cpp \
         backend.cpp \
         main.cpp \
-        studentmodel.cpp
+        studentmodel.cpp \
+        themelist.cpp
 
 RESOURCES += qml.qrc \
     qml.qrc
@@ -54,13 +56,15 @@ DISTFILES += \
 
 HEADERS += \
     account.h \
+    classes.h \
     database.h \
-    group.h \
-    grouplist.h \
+    date.h \
+    filemanager.h \
+    filemanager.h \
+    grades.h \
     groupmodel.h \
-    student.h \
-    studentlist.h \
     backend.h \
-    studentmodel.h
+    studentmodel.h \
+    themelist.h
 
 

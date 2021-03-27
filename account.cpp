@@ -84,4 +84,15 @@ void Account::login(int index){
     }
     qDebug() << m_loggedId;
 }
+void Account::changePassword(const int &index,const QString &newpassword){
+    QSqlQuery query;
+    qDebug() << index;
+    qDebug() << newpassword;
+    query.prepare("UPDATE " LOGIN
+                  " SET " LOGIN_PASSWORD "=:NEWPASSWORD WHERE id=:INDEX");
+    query.bindValue(":NEWPASSWORD", newpassword);
+    query.bindValue(":INDEX",index);
+    query.exec();
+    query.next();
+}
 
